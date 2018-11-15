@@ -4,10 +4,11 @@ import game_dialogs
 import game_ui
 import math
 import os
+import os.path
 import random as rd
 import sys
 import tkinter as tk
-import winsound as ws
+#import winsound as ws
 
 
 
@@ -131,7 +132,7 @@ class AAB:
 		self._mbtn(300, 225+(3*47), "Exit", 
 			lambda _=1: self.exit_game(),
 			(self.fn[0], 20), 200, 40, "white", 3)
-		filepath = "saves\\DEFAULT-STATE.savt"  # problems resetting game data with new game, this is the alternative 
+		filepath = os.path.join("saves","DEFAULT-STATE.savt")  # problems resetting game data with new game, this is the alternative 
 		with open(filepath, "r") as txtr:
 			data = txtr.read()
 		self.go_load = game_ui.LoadGame(self)
@@ -494,16 +495,16 @@ class AAB:
 	
 	
 	def load_resources(self, *args):
-		floc = "resources\\"  # file location of the Gif images
+		floc = os.path.abspath("resources") # file location of the Gif images
 		fdata = os.listdir(floc)  # get all files in the directory
 		# separate GIFs from the rest and gives the filename location
 		glist = [data[:-4] for data in fdata if data[-4:] == ".gif"]  # Gif
-		llist = [floc + data for data in fdata if data[-4:] == ".gif"]  # path
+		llist = [os.path.join(floc,data) for data in fdata if data[-4:] == ".gif"]  # path
 		self.rsc = {}
 		for gif in range(len(glist)):
 			self.rsc[glist[gif]] = tk.PhotoImage(file = llist[gif])
 		glist2 = [data[:-4] for data in fdata if data[-4:] == ".png"]  # Gif
-		llist2 = [floc + data for data in fdata if data[-4:] == ".png"]  # path	
+		llist2 = [os.path.join(floc,data) for data in fdata if data[-4:] == ".png"]  # path	
 		for gif2 in range(len(glist2)):
 			self.rsc[glist2[gif2]] = tk.PhotoImage(file = llist2[gif2])
 			

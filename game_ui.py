@@ -5,7 +5,8 @@ import math
 import os
 import random as rd
 import tkinter as tk
-import winsound as ws
+#import winsound as ws
+import simpleaudio as sa
 
 
 
@@ -108,6 +109,8 @@ class Battle:
 		self.eAvt = enemy["avatar"]  # battle avatar
 		
 		ws.PlaySound('Volatile_Reaction.wav', ws.SND_ASYNC)
+		#volatile_reaction_sound_obj = sa.WaveObject.from_wave_file('Volatile_Reaction.wav') 
+		#volatile_obj_play = volatile_reaction_sound_obj.play() 
 		
 		# init game stats
 		self.turn_holder = "Player"
@@ -376,7 +379,7 @@ class Battle:
 			# changes value of self.actors, how/why? how do we avoid this
 			self.eHP[0] = self.eHP[1]  # reset enemy HP
 			self.round_num = 1
-			ws.PlaySound(None, ws.SND_PURGE)
+			#ws.PlaySound(None, ws.SND_PURGE)
 			self.extract() 
 		
 		
@@ -717,7 +720,7 @@ class LoadGame:
 		self.cn.itemconfigure(self.zbox.m("selected_listbox_text"), text="")
 		self.load_listbox.delete(0, tk.END)
 		
-		fdata = os.listdir("saves\\")
+		fdata = os.listdir("saves{}".format(os.sep))
 		sav_list = [data[:-4] for data in fdata if data[-4:] == ".sav"]
 		for i in sav_list:
 			self.load_listbox.insert(tk.END, i)
@@ -732,7 +735,7 @@ class LoadGame:
 			self.cn.itemconfigure(tag, text="Bgn?")
 			self.parent.after(500, lambda _=1: self.cn.itemconfigure(tag, text="Load"))
 		elif btn_txt == "Bgn?":
-			filepath = "saves\\{}.sav".format(filename)
+			filepath = "saves{}{}.sav".format(os.sep,filename)
 			with open(filepath, "r") as txtr:
 				data = txtr.read()
 			self.load_data(data)
@@ -754,7 +757,7 @@ class LoadGame:
 			self.parent.after(500, lambda _=1: self.cn.itemconfigure(tag, text="Del"))
 		elif btn_txt == "[X]?":
 			try:
-				os.remove("saves\\{}.sav".format(filename))
+				os.remove("saves{}{}.sav".format(os.sep,filename))
 				self.reload_listbox()
 			except OSError:
 				pass
@@ -924,7 +927,7 @@ class SaveGame:
 		self.cn.itemconfigure(self.zbox.m("selected_listbox_text"), text="")
 		self.load_listbox.delete(0, tk.END)
 		
-		fdata = os.listdir("saves\\")
+		fdata = os.listdir("saves{}".format(os.sep))
 		sav_list = [data[:-4] for data in fdata if data[-4:] == ".sav"]
 		for i in sav_list:
 			self.load_listbox.insert(tk.END, i)
@@ -940,7 +943,7 @@ class SaveGame:
 		elif btn_txt == "Bgn?":
 			if " New ->  " in filename:
 				filename = filename.replace(" New ->  ", "")
-			filepath = "saves\\{}.sav".format(filename)
+			filepath = "saves{}{}.sav".format(os.sep,filename)
 			data = self.prepare_data()
 			with open(filepath, "w") as txtw:
 				txtw.write(data)
